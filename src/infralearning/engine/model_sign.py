@@ -8,11 +8,12 @@ from tensorflow.keras.preprocessing.image import load_img, img_to_array
 
 class model_sign:
 
-    model_identifier = tf.keras.models.load_model("infralearning\\models\\placas_identifier.h5")
-    # model_classifier = tf.keras.models.load_model("infralearning\\models\\placas_classifier.h5")
+    model_identifier = tf.keras.models.load_model("models\\placas_identifier.h5")
+    model_classifier = tf.keras.models.load_model("models\\placas_classifier.h5")
 
     labels_identifier = ['not_null', 'null']
     labels_classifier = ['advertencia', 'educativa', 'indicativa', 'regulamentacao', 'servicos', 'temporaria', 'turistico']
+
 
     def run(self, mount):
         dir_identifier, dir_clasifier = self.__setup_dirs(mount)

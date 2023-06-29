@@ -1,20 +1,21 @@
 import os
 import shutil
 
-class mount_service:
+
+class mount:
 
     root = os.getcwd()
     mount_root = os.path.join(root, 'mount')
 
-
-    def __init__(self, name='temp'):
+    def __init__(self, name = 'temp'):
         self.mount_dir = os.path.join(self.mount_root, name)
         self.mount_raw = os.path.join(self.mount_dir, 'raw')
         self.mount_log = os.path.join(self.mount_dir, 'log')
         self.mount_results = os.path.join(self.mount_dir, 'result')
+        self.__create_mount()
 
 
-    def create_mount(self):
+    def __create_mount(self):
         if not os.path.exists(self.mount_root):
             os.mkdir(self.mount_root)
         if os.path.exists(self.mount_dir):
