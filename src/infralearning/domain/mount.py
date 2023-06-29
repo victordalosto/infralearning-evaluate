@@ -2,7 +2,7 @@ import os
 import shutil
 
 
-class mount:
+class Mount:
 
     root = os.getcwd()
     mount_root = os.path.join(root, 'mount')

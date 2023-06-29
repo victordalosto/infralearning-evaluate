@@ -1,4 +1,4 @@
-class data:
+class Data:
 
     def __init__(self, path_video, path_log, name = 'temp'):
         self.name = name

@@ -6,7 +6,7 @@ import numpy as np
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 
 
-class model_sign:
+class ModeSign:
 
     model_identifier = tf.keras.models.load_model("models\\placas_identifier.h5")
     model_classifier = tf.keras.models.load_model("models\\placas_classifier.h5")

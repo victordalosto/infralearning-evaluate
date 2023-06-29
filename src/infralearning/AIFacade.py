@@ -1,13 +1,13 @@
-from infralearning.service.mount_factory import mount_factory
-from infralearning.service.video_service import video_service
+from infralearning.service.MountFactory import MountFactory
+from infralearning.service.video_service import VideoService
 
 
-class ai_facade:
+class AIFacade:
 
     def __init__(self, model):
         self.model = model
-        self.mount_factory = mount_factory()
-        self.video = video_service()
+        self.mount_factory = MountFactory()
+        self.video = VideoService()
 
 
     def run(self, data):

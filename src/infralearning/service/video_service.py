@@ -1,7 +1,7 @@
 import os
 import cv2
 
-class video_service():
+class VideoService():
 
     def extract_frames(self, path_video, path_dest_frames):
         video = cv2.VideoCapture(path_video)

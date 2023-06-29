@@ -1,8 +1,12 @@
 
-class model:
+class Model:
 
     def __init__(self, models):
         self.models = models
+
+
+    def of(models):
+        return Model(models)
 
 
     def run(self, data):
