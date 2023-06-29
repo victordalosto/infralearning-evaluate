@@ -3,7 +3,7 @@ import cv2
 
 class VideoService():
 
-    def extract_frames(self, path_video, path_dest_frames):
+    def extract_frames(self, path_video:str, path_dest_frames:str):
         video = cv2.VideoCapture(path_video)
         success, image = video.read()
         

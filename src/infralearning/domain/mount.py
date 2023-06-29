@@ -7,7 +7,7 @@ class Mount:
     root = os.getcwd()
     mount_root = os.path.join(root, 'mount')
 
-    def __init__(self, name = 'temp'):
+    def __init__(self, name:str = 'temp'):
         self.mount_dir = os.path.join(self.mount_root, name)
         self.mount_raw = os.path.join(self.mount_dir, 'raw')
         self.mount_log = os.path.join(self.mount_dir, 'log')

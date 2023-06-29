@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 
+from infralearning.domain.Mount import Mount
+
 
 class ModeSign:
 
@@ -15,9 +17,10 @@ class ModeSign:
     labels_classifier = ['advertencia', 'educativa', 'indicativa', 'regulamentacao', 'servicos', 'temporaria', 'turistico']
 
 
-    def run(self, mount):
+    def run(self, mount:Mount):
         dir_identifier, dir_clasifier = self.__setup_dirs(mount)
         self.__run_identifier(mount.mount_raw, dir_identifier)
+        self.__run_classifier(os.path.join(dir_identifier, self.labels_identifier[0]), dir_clasifier)
 
 
     def __setup_dirs(self, mount):
@@ -58,13 +61,21 @@ class ModeSign:
             shutil.copy(src, dst)
 
 
+    
+    def __run_classifier(self, dir_input, dir_output):
+        for img in os.listdir(dir_input):
+            image_target = os.path.join(dir_input, img)
+            image = load_img(image_target, target_size=(256, 256))
+            image_array = np.expand_dims((img_to_array(image) / 255.0), axis=0)
+            
+            predict = self.model_classifier.predict(image_array)
+            label = self.labels_classifier[np.argmax(predict)]
+            confidence = np.round(predict[0, np.argmax(predict)] * 100, decimals=1)
 
-# for img in os.listdir(path):
-#     image_path = os.path.join(path, img)
-#     image = load_img(image_path, target_size=(256, 256))
-#     image_array = img_to_array(image) / 255.0
-#     image_array = np.expand_dims(image_array, axis=0)
-#     predictions = model.predict(image_array)
-#     predicted_label = labels[np.argmax(predictions)]
-#     confidence = np.round(predictions[0, np.argmax(predictions)] * 100, decimals=1)
-#     print('Predict:', predicted_label, '(', confidence, '%)')
+            src = image_target
+            dst = os.path.join(dir_output, 
+                               label, 
+                               (image_target.replace(dir_input, "")
+                                            .replace("\\", "")
+                                            .replace(".jpg", "_" + str(confidence) + ".jpg")))
+            shutil.copy(src, dst)
