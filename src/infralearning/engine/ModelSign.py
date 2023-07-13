@@ -1,11 +1,10 @@
 import os
 import shutil
-import tensorflow as tf
-import matplotlib.pyplot as plt
-import numpy as np
-from tensorflow.keras.preprocessing.image import load_img, img_to_array
 
-from infralearning.domain.Mount import Mount
+import numpy as np
+import tensorflow as tf
+from tensorflow.keras.preprocessing.image import img_to_array, load_img
+
 from infralearning.engine.Model import Model
 
 
@@ -18,19 +17,20 @@ class Model_RoadSign(Model):
     labels_classifier = ['advertencia', 'educativa', 'indicativa', 'regulamentacao', 'servicos', 'turistico']
 
 
-    def run(self, mount:Mount):
-        dir_detection, dir_classifier = self.setup_dir(mount.results)
-        self.__run_detection(mount.input, dir_detection)
+    def run(self, input_path, output_path):
+        dir_detection, dir_classifier = self.setup_dir(output_path)
+        self.__run_detection(input_path, dir_detection)
         # self.__run_classifier(os.path.join(dir_detection, self.labels_detection[0]), dir_classifier)
 
 
 
     def setup_dir(self, path):
-        dir_detection = os.path.join(path, 'identifier')
-        dir_classifier = os.path.join(path, 'classifier')
-        shutil.rmtree(dir_detection) if os.path.exists(dir_detection) else None
+        dir = os.path.join(path, self.get_nome())
+        dir_detection = os.path.join(dir, 'identifier')
+        dir_classifier = os.path.join(dir, 'classifier')
+        shutil.rmtree(dir) if os.path.exists(dir) else None
+        os.mkdir(dir)
         os.mkdir(dir_detection)
-        shutil.rmtree(dir_classifier) if os.path.exists(dir_classifier) else None
         os.mkdir(dir_classifier)
         for label_detection in self.labels_detection:
             os.mkdir(os.path.join(dir_detection, label_detection))
@@ -48,7 +48,7 @@ class Model_RoadSign(Model):
             image_array = np.expand_dims((img_to_array(image) / 255.0), axis=0)
             
             predict = self.model_detection.predict(image_array)[0][0]
-            if (predict <= 0.5):
+            if (predict < 0.5):
                 label = self.labels_detection[0]
                 confidence = np.round((1 - predict) * 100, decimals=0)
                 list_predictions.append(confidence)
@@ -61,6 +61,7 @@ class Model_RoadSign(Model):
                                label, 
                                (image_target.replace(dir_input, "")
                                             .replace("/", "")
+                                            .replace("\\", "")
                                             .replace(".jpg", "_" + str(confidence) + ".jpg")))
             shutil.copy(src, dst)
 
@@ -81,6 +82,7 @@ class Model_RoadSign(Model):
                                label, 
                                (image_target.replace(dir_input, "")
                                             .replace("/", "")
+                                            .replace("\\", "")
                                             .replace(".jpg", "_" + str(confidence) + ".jpg")))
             shutil.copy(src, dst)
 
