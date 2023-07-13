@@ -11,4 +11,4 @@ data = Data(name = '418BA000000',
             video = '/media/victor/3201/3201/12_06_2022/1_418BA000000/videos/camera1/418BA000000.mp4')
 
 
-facade.run(data=data)
+facade.run(data=data,truncate=False)

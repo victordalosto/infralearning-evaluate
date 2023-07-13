@@ -8,49 +8,52 @@ from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from infralearning.domain.Mount import Mount
 from infralearning.engine.Model import Model
 
+
 class Model_RoadSign(Model):
 
-    model_identifier = tf.keras.models.load_model("models/full_detection.h5")
-    # model_classifier = tf.keras.models.load_model("models/placas_classifier_v1.h5")
+    model_detection = tf.keras.models.load_model("models/sign_detection.h5")
+    model_classifier = tf.keras.models.load_model("models/sign_classification.h5")
 
-    labels_identifier = ['not_null', 'null']
+    labels_detection = ['not_null', 'null']
     labels_classifier = ['advertencia', 'educativa', 'indicativa', 'regulamentacao', 'servicos', 'turistico']
 
 
     def run(self, mount:Mount):
-        dir_identifier, dir_clasifier = self.__setup_dirs(mount)
-        print("DIRETORIOS: ", dir_identifier, dir_clasifier)
-        self.__run_identifier(mount.input, dir_identifier)
-        self.__run_classifier(os.path.join(dir_identifier, self.labels_identifier[0]), dir_clasifier)
+        dir_detection, dir_classifier = self.setup_dir(mount.results)
+        self.__run_detection(mount.input, dir_detection)
+        # self.__run_classifier(os.path.join(dir_detection, self.labels_detection[0]), dir_classifier)
 
 
-    def __setup_dirs(self, mount):
-        dir_identifier = os.path.join(mount.mount_results, 'identifier')
-        dir_clasifier = os.path.join(mount.mount_results, 'classifier')
-        shutil.rmtree(dir_identifier) if os.path.exists(dir_identifier) else None
-        os.mkdir(dir_identifier)
-        shutil.rmtree(dir_clasifier) if os.path.exists(dir_clasifier) else None
-        os.mkdir(dir_clasifier)
-        for label in self.labels_identifier:
-            os.mkdir(os.path.join(dir_identifier, label))
-        for label in self.labels_classifier:
-            os.mkdir(os.path.join(dir_clasifier, label))
-        return dir_identifier, dir_clasifier
+
+    def setup_dir(self, path):
+        dir_detection = os.path.join(path, 'identifier')
+        dir_classifier = os.path.join(path, 'classifier')
+        shutil.rmtree(dir_detection) if os.path.exists(dir_detection) else None
+        os.mkdir(dir_detection)
+        shutil.rmtree(dir_classifier) if os.path.exists(dir_classifier) else None
+        os.mkdir(dir_classifier)
+        for label_detection in self.labels_detection:
+            os.mkdir(os.path.join(dir_detection, label_detection))
+        for label_classifier in self.labels_classifier:
+            os.mkdir(os.path.join(dir_classifier, label_classifier))
+        return dir_detection, dir_classifier
 
 
     
-    def __run_identifier(self, dir_input, dir_output):
+    def __run_detection(self, dir_input, dir_output):
+        list_predictions = [[],[]]
         for img in os.listdir(dir_input):
             image_target = os.path.join(dir_input, img)
             image = load_img(image_target, target_size=(256, 256))
             image_array = np.expand_dims((img_to_array(image) / 255.0), axis=0)
             
-            predict = self.model_identifier.predict(image_array)[0][0]
+            predict = self.model_detection.predict(image_array)[0][0]
             if (predict <= 0.5):
-                label = self.labels_identifier[0]
+                label = self.labels_detection[0]
                 confidence = np.round((1 - predict) * 100, decimals=0)
+                list_predictions.append(confidence)
             else:
-                label = self.labels_identifier[1]
+                label = self.labels_detection[1]
                 confidence = np.round(predict * 100, decimals=0)
 
             src = image_target
@@ -80,3 +83,8 @@ class Model_RoadSign(Model):
                                             .replace("/", "")
                                             .replace(".jpg", "_" + str(confidence) + ".jpg")))
             shutil.copy(src, dst)
+
+
+
+    def get_nome(self):
+        return "sign"
