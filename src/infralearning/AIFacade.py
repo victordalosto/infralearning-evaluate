@@ -1,25 +1,29 @@
 from infralearning.domain.Data import Data
+from infralearning.domain.Mount import Mount
 from infralearning.engine.Model import Model
-from infralearning.service.MountFactory import MountFactory
-from infralearning.service.video_service import VideoService
+from infralearning.service.VideoService import VideoService
+import os
 
 
 class AIFacade:
 
-    def __init__(self, model:Model):
-        self.model = model
-        self.mount_factory = MountFactory()
-        self.video = VideoService()
+    video_service = VideoService()
+
+    def __init__(self, list_model:Model):
+        self.list_models = list_model
 
 
-    def run(self, data:Data):
+    def run(self, data:Data, directory=os.getcwd(), truncate=True):
         print('\n\nRunning AI')
         
         print('..Mounting directory: ' + data.name)
-        mount = self.mount_factory.of(data = data)
+        mount = Mount(name=data.name, 
+                      directory=directory, 
+                      truncate=truncate)
        
-        print('..Extracting frames from video: ' + data.path_video)
-        self.video.extract_frames(path_video=data.path_video, path_dest_frames=mount.mount_raw)
+        print('..Extracting frames from video: ' + data.video)
+        self.video_service.extract_frames(path_video=data.video, path_dest_frames=mount.input)
 
         print('.. Training model')
-        self.model.run(mount)
+        for model in self.list_models:
+            model.run(mount)

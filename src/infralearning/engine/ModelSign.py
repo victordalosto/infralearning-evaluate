@@ -6,20 +6,21 @@ import numpy as np
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 
 from infralearning.domain.Mount import Mount
+from infralearning.engine.Model import Model
 
+class Model_RoadSign(Model):
 
-class ModeSign:
-
-    model_identifier = tf.keras.models.load_model("models\\placas_identifier.h5")
-    model_classifier = tf.keras.models.load_model("models\\placas_classifier.h5")
+    model_identifier = tf.keras.models.load_model("models/full_detection.h5")
+    # model_classifier = tf.keras.models.load_model("models/placas_classifier_v1.h5")
 
     labels_identifier = ['not_null', 'null']
-    labels_classifier = ['advertencia', 'educativa', 'indicativa', 'regulamentacao', 'servicos', 'temporaria', 'turistico']
+    labels_classifier = ['advertencia', 'educativa', 'indicativa', 'regulamentacao', 'servicos', 'turistico']
 
 
     def run(self, mount:Mount):
         dir_identifier, dir_clasifier = self.__setup_dirs(mount)
-        self.__run_identifier(mount.mount_raw, dir_identifier)
+        print("DIRETORIOS: ", dir_identifier, dir_clasifier)
+        self.__run_identifier(mount.input, dir_identifier)
         self.__run_classifier(os.path.join(dir_identifier, self.labels_identifier[0]), dir_clasifier)
 
 
@@ -56,7 +57,7 @@ class ModeSign:
             dst = os.path.join(dir_output, 
                                label, 
                                (image_target.replace(dir_input, "")
-                                            .replace("\\", "")
+                                            .replace("/", "")
                                             .replace(".jpg", "_" + str(confidence) + ".jpg")))
             shutil.copy(src, dst)
 
@@ -76,6 +77,6 @@ class ModeSign:
             dst = os.path.join(dir_output, 
                                label, 
                                (image_target.replace(dir_input, "")
-                                            .replace("\\", "")
+                                            .replace("/", "")
                                             .replace(".jpg", "_" + str(confidence) + ".jpg")))
             shutil.copy(src, dst)
