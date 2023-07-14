@@ -5,7 +5,8 @@ from math import floor
 
 class VideoService():
 
-    desired_frames_per_second = 9
+    def __init__(self, frames_per_second=1):
+        self.desired_frames_per_second = frames_per_second
 
 
     def extract_frames(self, 

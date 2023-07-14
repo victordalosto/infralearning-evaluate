@@ -1,10 +1,12 @@
 class Data:
 
     def __init__(self, 
-                 video:str,
                  log:str,
+                 path_video:str = None,
+                 path_image_folder:str = None,
                  name:str = 'temp',
                  ):
-        self.name = name
-        self.video = video
         self.log = log
+        self.video = path_video
+        self.image = path_image_folder
+        self.name = name

@@ -7,26 +7,30 @@ import os
 
 class AIFacade:
 
-    video_service = VideoService()
 
-
-    def __init__(self, list_model:Model):
-        self.list_models = list_model
+    def __init__(self, list_models:Model, frames_per_second=1):
+        self.list_models = list_models
+        self.video_service = VideoService(frames_per_second)
 
 
     def run(self, data:Data, directory=os.getcwd(), truncate=True):
-        print('\n\nRunning AIFacade')
-        
+
+        print('\n\nRunning AI Facade')
         mount = Mount(name=data.name, directory=directory)
         
         if truncate:
-            print('..Creating mount')
+            print('.. Creating mount')
             mount.recreate_mount()
 
-            print('..Extracting frames from video: ' + data.video)
-            self.video_service.extract_frames(path_video=data.video, path_dest_frames=mount.input)
+            if data.video is not None:
+                print('.. Extracting frames from video: ' + data.video)
+                self.video_service.extract_frames(path_video=data.video, path_dest_frames=mount.input)
 
-        print('..Using AI models')
+        if data.image is not None:
+            print('.. Making mount input as link shortcut: ' + data.image)
+            mount.input = data.image
+
+        print('.. Evaluating using AI models')
         for model in self.list_models:
-            print('....model:' + model.get_name())
-            model.run(mount)
+            print('.... Model:' + model.get_name())
+            model.run(input_path=mount.input, output_path=mount.output)
