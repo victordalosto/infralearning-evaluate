@@ -7,7 +7,7 @@ class Model:
 
 
     @abstractmethod
-    def get_nome(self) -> str:
+    def get_name(self) -> str:
         pass
 
 

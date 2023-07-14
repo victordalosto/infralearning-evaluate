@@ -25,7 +25,7 @@ class Model_RoadSign(Model):
 
 
     def setup_dir(self, path):
-        dir = os.path.join(path, self.get_nome())
+        dir = os.path.join(path, self.get_name())
         dir_detection = os.path.join(dir, 'identifier')
         dir_classifier = os.path.join(dir, 'classifier')
         shutil.rmtree(dir) if os.path.exists(dir) else None
@@ -88,5 +88,5 @@ class Model_RoadSign(Model):
 
 
 
-    def get_nome(self):
+    def get_name(self):
         return "sign"

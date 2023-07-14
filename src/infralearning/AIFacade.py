@@ -37,6 +37,6 @@ class AIFacade:
         print('.. Evaluating using AI models')
         for model in self.list_models:
             print('.... Model:' + model.get_name())
-            model.run(input_path=mount.input, output_path=mount.output)
+            model.run(input_path=mount.input, output_path=mount.results)
         
         return mount
