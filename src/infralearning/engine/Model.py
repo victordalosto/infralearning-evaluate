@@ -1,11 +1,13 @@
 from abc import abstractmethod
 
+from infralearning.domain.Mount import Mount
+
 
 class Model:
 
 
     @abstractmethod
-    def get_nome(self):
+    def get_nome(self) -> str:
         pass
 
 
@@ -15,5 +17,5 @@ class Model:
 
 
     @abstractmethod
-    def run(self, input_path, output_path):
+    def run(self, input_path, output_path) -> Mount:
         pass

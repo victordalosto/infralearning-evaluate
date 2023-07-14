@@ -17,14 +17,14 @@ class Mount:
             os.mkdir(self.root)
 
 
+    def create_mount(self):
+        os.mkdir(self.dir) if not os.path.exists(self.dir) else None
+        os.mkdir(self.log) if not os.path.exists(self.log) else None
+        os.mkdir(self.input) if not os.path.exists(self.input) else None
+        os.mkdir(self.results) if not os.path.exists(self.results) else None
+
+
     def recreate_mount(self):
         if os.path.exists(self.dir):
             shutil.rmtree(self.dir)
-        os.mkdir(self.dir)
-        os.mkdir(self.input)
-        os.mkdir(self.log)
-        os.mkdir(self.results)
-
-
-    def get_input(self):
-        return self.input
+        self.create_mount()

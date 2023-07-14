@@ -16,15 +16,19 @@ class AIFacade:
     def run(self, data:Data, directory=os.getcwd(), truncate=True):
 
         print('\n\nRunning AI Facade')
+        
         mount = Mount(name=data.name, directory=directory)
         
-        if truncate:
+        if not truncate:
             print('.. Creating mount')
+            mount.create_mount()
+        else:
+            print('.. Clearing mount')
             mount.recreate_mount()
 
-            if data.video is not None:
-                print('.. Extracting frames from video: ' + data.video)
-                self.video_service.extract_frames(path_video=data.video, path_dest_frames=mount.input)
+        if truncate and data.video is not None:
+            print('.. Extracting frames from video: ' + data.video)
+            self.video_service.extract_frames(path_video=data.video, path_dest_frames=mount.input)
 
         if data.image is not None:
             print('.. Making mount input as link shortcut: ' + data.image)
@@ -34,3 +38,5 @@ class AIFacade:
         for model in self.list_models:
             print('.... Model:' + model.get_name())
             model.run(input_path=mount.input, output_path=mount.output)
+        
+        return mount

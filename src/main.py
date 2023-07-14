@@ -3,7 +3,7 @@ from infralearning.domain.Data import Data
 from infralearning.engine.ModelSign import Model_RoadSign
 
 
-facade = AIFacade([Model_RoadSign()])
+facade = AIFacade([Model_RoadSign()], frames_per_second=1)
 
 
 data = Data(name = '418BA000000',
