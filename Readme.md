@@ -18,3 +18,29 @@ This evaluation works in the following steps:
 <br>
 
 The program was created and intended to be used with docker, where each container would be loaded with (i) a mount directory and a video to be evaluated, (ii) the program would extract the frames and evaluate them with the AI models, (iii) and finally the results would be saved in the mount directory and the container could be destroyed.
+
+<i>The docker part is not implemented yet.</i>
+
+<h2> How it works </h2>
+
+This evaluation works in the following steps:
+<br/><br/>
+
+
+<h2> Example of usage</h2>
+
+Tests were used to evaluate <strong>road signs</strong> following those steps:
+
+(i) An MP4 video '<i>path_video</i>' is placed in the <b>main.py</b>;
+
+(ii) On start, the program will create a <b>mount</b> directory where it will place the frames extracted;
+
+(iii) The program will <b>detect</b> in each frame if a sign is present or not;
+
+(iv) The frames with roads signs are classified in the following categoryes: <i>'advertencia', 'educativa', 'indicativa', 'regulamentacao', 'servicos', 'turistico'</i>
+
+(v) The road signs can be classified in <b>quality</b> categories: <i>'boa', 'ruim', 'regular'</i> (not implemented yet)
+
+(vi) The program will save the results in the <b>mount</b> directory, in the <i>results.
+
+(vii) The program should generate a KML geographical file with the results (not implemented yet)
