@@ -21,11 +21,6 @@ The program was created and intended to be used with docker, where each containe
 
 <i>The docker part is not implemented yet.</i>
 
-<h2> How it works </h2>
-
-This evaluation works in the following steps:
-<br/><br/>
-
 
 <h2> Example of usage</h2>
 
