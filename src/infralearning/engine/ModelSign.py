@@ -20,7 +20,7 @@ class Model_RoadSign(Model):
     def run(self, input_path, output_path):
         dir_detection, dir_classifier = self.setup_dir(output_path)
         self.__run_detection(input_path, dir_detection)
-        # self.__run_classifier(os.path.join(dir_detection, self.labels_detection[0]), dir_classifier)
+        self.__run_classifier(os.path.join(dir_detection, self.labels_detection[0]), dir_classifier)
 
 
 
